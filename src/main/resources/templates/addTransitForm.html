@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>Registration form</title>
+</head>
+<body>
+<h1>Registration form</h1>
+<form action="#" method="post" th:action="@{/addTransitForm.html}" th:object="${transit}">
+    <input th:field="*{sourceAddress}" placeholder="Source Address" /><br />
+    <input th:field="*{destinationAddress}" placeholder="Destination Address" /><br />
+    <input th:field="*{price}" type="email" placeholder="Price in PLN" /><br />
+    <input th:field="*{date}" type="date" placeholder="Date" /><br />
+    <input type="submit" value="Add transit" />
+</form>
+</body>
+</html>
