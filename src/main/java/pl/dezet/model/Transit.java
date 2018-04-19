@@ -1,5 +1,6 @@
 package pl.dezet.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
@@ -23,6 +24,7 @@ public class Transit {
     @NotEmpty
     private String destinationAddress;
     private double price;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
     private Long distance;
 
@@ -66,7 +68,6 @@ public class Transit {
         this.date = date;
     }
 
-
     public Long getDistance() {
         return distance;
     }
@@ -86,4 +87,6 @@ public class Transit {
                 ", distance=" + distance +
                 '}';
     }
+
+
 }

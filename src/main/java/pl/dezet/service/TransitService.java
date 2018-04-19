@@ -7,10 +7,14 @@ import com.google.maps.GeoApiContext;
 import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.TravelMode;
 import com.google.maps.model.Unit;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.dezet.model.Transit;
 import pl.dezet.repository.TransitRepository;
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class TransitService {
@@ -42,4 +46,15 @@ public class TransitService {
         transit.setDistance(distance);
 
     }
+
+    public List<Transit> getTransitsWithDateAfter(Date date){
+       List<Transit> transits = transitRepository.findAllByDateAfter(date);
+       return transits;
+       }
+
+       public List<Transit> getTransitsWithDateBefore(Date date){
+        List<Transit> transits = transitRepository.findAllByDateBefore(date);
+        return transits;
+       }
+
 }
