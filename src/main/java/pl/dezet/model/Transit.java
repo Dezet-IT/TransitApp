@@ -2,11 +2,13 @@ package pl.dezet.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -23,9 +25,9 @@ public class Transit {
     private String sourceAddress;
     @NotEmpty
     private String destinationAddress;
-    private double price;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private Double price;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate date;
     private Long distance;
 
     public Long getId() {
@@ -52,19 +54,19 @@ public class Transit {
         this.destinationAddress = destinationAddress;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

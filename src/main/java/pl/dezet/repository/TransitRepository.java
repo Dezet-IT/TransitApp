@@ -5,11 +5,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import pl.dezet.model.Transit;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface TransitRepository extends JpaRepository<Transit, Long> {
 
-    @Query("SELECT r FROM Transit r WHERE r.date between :startDate and :endDate")
-    List<Transit> find(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    @Query("SELECT r FROM Transit r WHERE r.date between :start_date and :end_date")
+    List<Transit> find(@Param("start_date") LocalDate startDate, @Param("end_date") LocalDate endDate);
 }

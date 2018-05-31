@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import pl.dezet.model.Transit;
 import pl.dezet.repository.TransitRepository;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -35,19 +35,27 @@ public class TransitService {
         GeoApiContext geoApiContext = new GeoApiContext.Builder().apiKey(API_KEY).build();
         DistanceMatrixApiRequest request = DistanceMatrixApi.newRequest(geoApiContext);
 
-        DistanceMatrix result = request.origins(transit.getSourceAddress())
-                .destinations(transit.getDestinationAddress())
-                .mode(TravelMode.DRIVING)
-                .units(Unit.METRIC)
-                .awaitIgnoreError();
+        try {
+            DistanceMatrix result = request.origins(transit.getSourceAddress())
+                    .destinations(transit.getDestinationAddress())
+                    .mode(TravelMode.DRIVING)
+                    .units(Unit.METRIC)
+                    .awaitIgnoreError();
 
-        long distance = result.rows[0].elements[0].distance.inMeters;
-        transit.setDistance(distance);
+            long distance = (result.rows[0].elements[0].distance.inMeters) / 1000;
+            transit.setDistance(distance);
+        } catch (NullPointerException e) {
+            e.fillInStackTrace().getMessage();
+        }
+
 
     }
 
-    public List<Transit> getTransits(Date startDate, Date endDate) {
+    public List<Transit> getTransits(LocalDate startDate, LocalDate endDate) {
         List<Transit> transits = transitRepository.find(startDate, endDate);
+        for (int i = 0; i < transits.size(); i++) {
+            System.out.println(transits.get(i).toString());
+        }
         return transits;
     }
 

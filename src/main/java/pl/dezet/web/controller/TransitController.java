@@ -1,17 +1,17 @@
 package pl.dezet.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import pl.dezet.model.Transit;
 import pl.dezet.service.TransitService;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 
 @RestController
-@RequestMapping("/transit")
 public class TransitController {
     private TransitService transitService;
 
@@ -20,23 +20,32 @@ public class TransitController {
         this.transitService = transitService;
     }
 
-
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/transit", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void addTransit(@RequestBody Transit transit) {
         transitService.calculateDistance(transit);
         transitService.addTransit(transit);
         System.out.println(transit);
+        System.out.println(LocalDate.now());
     }
 
     @RequestMapping(path = "reports/daily", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void getDailyReport(@RequestParam("startDate") Date startDate, @RequestParam("endDate") Date endDate) {
+    public String getDailyReport(@RequestParam ("start_date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate, @RequestParam("end_date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         double totalDistance = 0.0;
         double totalPrice = 0.0;
         List<Transit> transits = transitService.getTransits(startDate, endDate);
-        for (int i = 0; i < transits.size(); i++) {
-            totalDistance = totalDistance + transits.get(i).getDistance();
-            totalPrice = totalPrice + transits.get(i).getPrice();
+        for (Transit transit : transits) {
+            if (transit.getDistance() != null && transit.getPrice() != null) {
+                try {
+                    totalDistance = totalDistance + transit.getDistance();
+                    totalPrice = totalPrice + transit.getPrice();
+                } catch (NullPointerException e) {
+                    e.fillInStackTrace().getMessage();
+                }
+            }
         }
+
+
+        return "Total distance " + totalDistance + ", total price: " + totalPrice;
 
     }
 
