@@ -29,7 +29,7 @@ public class TransitController {
     }
 
     @RequestMapping(path = "reports/daily", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String getDailyReport(@RequestParam ("start_date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate, @RequestParam("end_date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+    public String getDailyReport(@RequestParam("start_date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate, @RequestParam("end_date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         double totalDistance = 0.0;
         double totalPrice = 0.0;
         List<Transit> transits = transitService.getTransits(startDate, endDate);
@@ -43,8 +43,26 @@ public class TransitController {
                 }
             }
         }
+        return "Total distance " + totalDistance + ", total price: " + totalPrice;
+    }
 
-
+    @RequestMapping(path = "reports/monthly", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String getMonthlyReport() {
+        double totalDistance = 0.0;
+        double totalPrice = 0.0;
+        LocalDate startDate = LocalDate.now().withDayOfMonth(1);
+        LocalDate currentDate = LocalDate.now();
+        List<Transit> transits = transitService.getTransits(startDate, currentDate);
+        for (Transit transit : transits) {
+            if (transit.getDistance() != null && transit.getPrice() != null) {
+                try {
+                    totalDistance = totalDistance + transit.getDistance();
+                    totalPrice = totalPrice + transit.getPrice();
+                } catch (NullPointerException e) {
+                    e.fillInStackTrace().getMessage();
+                }
+            }
+        }
         return "Total distance " + totalDistance + ", total price: " + totalPrice;
 
     }
