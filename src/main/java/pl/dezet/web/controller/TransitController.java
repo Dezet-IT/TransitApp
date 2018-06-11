@@ -1,5 +1,6 @@
 package pl.dezet.web.controller;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 public class TransitController {
     private TransitService transitService;
+    private Logger logger;
 
     @Autowired
     public void setTransitService(TransitService transitService) {
@@ -39,7 +41,7 @@ public class TransitController {
                     totalDistance = totalDistance + transit.getDistance();
                     totalPrice = totalPrice + transit.getPrice();
                 } catch (NullPointerException e) {
-                    e.fillInStackTrace().getMessage();
+                    logger.error("Nullpointer exception", e);
                 }
             }
         }
@@ -59,7 +61,7 @@ public class TransitController {
                     totalDistance = totalDistance + transit.getDistance();
                     totalPrice = totalPrice + transit.getPrice();
                 } catch (NullPointerException e) {
-                    e.fillInStackTrace().getMessage();
+                    logger.error("Nullpointer exception", e);
                 }
             }
         }
