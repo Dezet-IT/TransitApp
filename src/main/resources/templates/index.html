@@ -1,12 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html ng-app="app">
 <head>
-<meta charset="UTF-8"></meta>
-<title>Homepage</title>
+	<meta charset="UTF-8"></meta>
+	<title>Transit Manager</title>
 </head>
-<body>
-	<h1>Welcome in Spring security with user database</h1>
-	<a href="#" th:href="@{/register}">Register</a>
-	<a href="#" th:href="@{/transit}">Secret Page</a>
+<body ng-controller="TransitController as transController">
+<h1>{{transController.appName}}</h1>
+<br>
+<form>
+	<input type="text" ng-model="transController.transit.sourceAddress" placeholder="Source address"/><br/>
+	<input type="text" ng-model="transController.transit.destinatonAddress" placeholder="Destination address"/><br/>
+	<input type="text" ng-model="transController.transit.price" placeholder="Price"/><br/>
+	<input type="date" ng-model="transController.transit.dateTime" placeholder="YYYY-MM-DD"/><br/>
+	<button ng-click="transController.addTransit(transController.transit)">Add Transit</button>
+</form>
+
+<ul>
+	<li ng-repeat="trans in transController.transits">
+		{{trans.sourceAddress}} - {{transit.destinatonAddress}} {{transit.price}}
+	</li>
+</ul>
+<script type="text/javascript" src="js/lib/angular/angular.js"></script>
+<script type="text/javascript" src="js//app/app.js"></script>
 </body>
 </html>
